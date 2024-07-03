@@ -122,6 +122,7 @@ struct RegisterView: View {
                     "email": self.email,
                     "usertype": self.usertype,
                     "gender": self.gender
+                    
                 ]
                 
                 let ref = Database.database().reference()
@@ -167,7 +168,7 @@ struct PasswordField: View {
                 }
             }
         }
-    
+        
     }
 }
 

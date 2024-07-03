@@ -10,6 +10,7 @@ struct LoginView: View {
     @State private var navigateToView: Bool = false
     @State private var destinationView: AnyView? = nil
     @Binding var isLoggedIn: Bool
+    @State private var showResetPasswordView = false
 
     var body: some View {
         NavigationStack {
@@ -24,7 +25,7 @@ struct LoginView: View {
                     .scaledToFit()
                     .padding()
 
-                Text("User Login")
+                Text("LOGIN")
                     .bold()
                     .font(.title)
 
@@ -51,7 +52,7 @@ struct LoginView: View {
                         .bold()
                         .frame(width: 350, height: 50)
                         .foregroundColor(.white)
-                        .background(Color.blue)
+                        .background(Color.purple)
                         .padding()
                         .cornerRadius(25.0)
                         .font(.title)
@@ -66,7 +67,9 @@ struct LoginView: View {
                         Text("Sign Up").foregroundColor(.blue)
                     }
 
-                    Button(action: forgotPassword) {
+                    Button(action: {
+                        showResetPasswordView = true
+                    }) {
                         Text("Forgot Password")
                             .foregroundColor(.blue)
                     }
@@ -78,6 +81,10 @@ struct LoginView: View {
                     isActive: $navigateToView,
                     label: { EmptyView() }
                 )
+
+                NavigationLink(destination: ResetpwView(), isActive: $showResetPasswordView) {
+                    EmptyView()
+                }
             }
             .padding()
             .navigationTitle("")
@@ -96,18 +103,6 @@ struct LoginView: View {
                     destinationView = AnyView(PatientView())
                 }
                 navigateToView = true
-            }
-        }
-    }
-
-    private func forgotPassword() {
-        Auth.auth().sendPasswordReset(withEmail: email) { error in
-            if let error = error {
-                alertMessage = error.localizedDescription
-                showAlert = true
-            } else {
-                alertMessage = "Password reset email sent."
-                showAlert = true
             }
         }
     }

@@ -11,7 +11,7 @@ struct ResetpwView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image(systemName: "lock.fill") 
+                Image(.resetpw) 
                     .resizable()
                     .frame(width: 100, height: 100)
                     .scaledToFit()
@@ -41,9 +41,9 @@ struct ResetpwView: View {
                 Button(action: resetPassword) {
                     Text("Save")
                         .bold()
-                        .frame(maxWidth: .infinity)
+                        .frame(width: 200,height: 50)
                         .foregroundColor(.white)
-                        .background(Color.blue)
+                        .background(Color.purple)
                         .padding()
                         .cornerRadius(10)
                         .font(.title)
