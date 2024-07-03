@@ -2,7 +2,7 @@ import SwiftUI
 import Firebase
 
 @main
-struct FinalPrjoectiOSApp: App {
+struct FinalProjectiOSApp: App {
     init() {
         FirebaseApp.configure()
     }
