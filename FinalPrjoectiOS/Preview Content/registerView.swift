@@ -152,6 +152,7 @@ struct PasswordField: View {
                     .padding()
                     .border(Color.black)
                     .multilineTextAlignment(.center)
+                
             } else {
                 SecureField(placeholder, text: $text)
                     .padding()
@@ -167,7 +168,7 @@ struct PasswordField: View {
                 }
             }
         }
-        .padding(.horizontal)
+        
     }
 }
 
