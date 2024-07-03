@@ -1,14 +1,12 @@
-//
-//  FinalPrjoectiOSApp.swift
-//  FinalPrjoectiOS
-//
-//  Created by ART on 2024-06-26.
-//
-
 import SwiftUI
+import Firebase
 
 @main
 struct FinalPrjoectiOSApp: App {
+    init() {
+        FirebaseApp.configure()
+    }
+
     var body: some Scene {
         WindowGroup {
             ContentView()

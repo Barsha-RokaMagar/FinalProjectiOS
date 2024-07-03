@@ -1,24 +1,40 @@
-//
-//  ContentView.swift
-//  FinalPrjoectiOS
-//
-//  Created by ART on 2024-06-26.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+    @State private var showSplashScreen = true
+    @State private var isLoggedIn = false
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            if isLoggedIn {
+                NavigationView {
+                    if isLoggedIn {
+                        Text("User is logged in") // Placeholder; you can replace this with your main app view
+                    } else {
+                        LoginView(isLoggedIn: $isLoggedIn)
+                    }
+                }
+            } else {
+                if showSplashScreen {
+                    SplashScreenView()
+                        .transition(.opacity)
+                } else {
+                    LoginView(isLoggedIn: $isLoggedIn)
+                }
+            }
         }
-        .padding()
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation {
+                    showSplashScreen = false
+                }
+            }
+        }
     }
 }
 
-#Preview {
-    ContentView()
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
 }
