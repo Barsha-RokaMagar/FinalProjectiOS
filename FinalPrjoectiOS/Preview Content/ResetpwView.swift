@@ -13,11 +13,11 @@ struct ResetpwView: View {
             VStack {
                 Image(.resetpw) 
                     .resizable()
-                    .frame(width: 100, height: 100)
+                    .frame(width: 200 ,height: 200)
                     .scaledToFit()
                 Text("Reset Password")
                     .bold()
-                    .font(.custom("AmericanTypewriter", fixedSize: 25))
+                    .font(.custom("AmericanTypewriter", fixedSize: 40))
                     .foregroundColor(Color(red: 0.2, green: 0.4, blue: 0.2))
                 
                 TextField("Email", text: $email)
@@ -26,22 +26,11 @@ struct ResetpwView: View {
                     .multilineTextAlignment(.center)
                     .padding()
                 
-                SecureField("New Password", text: $newPassword)
-                    .padding()
-                    .border(Color.black)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                
-                SecureField("Confirm Password", text: $confirmPassword)
-                    .padding()
-                    .border(Color.black)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                
+               
                 Button(action: resetPassword) {
-                    Text("Save")
+                    Text("Reset password")
                         .bold()
-                        .frame(width: 200,height: 50)
+                        .frame(width: 370,height: 50)
                         .foregroundColor(.white)
                         .background(Color.purple)
                         .padding()
@@ -56,6 +45,7 @@ struct ResetpwView: View {
                 NavigationLink(destination: LoginView(isLoggedIn: .constant(false))) {
                     Text("Back to Login")
                         .foregroundColor(.blue)
+                        .font(.title)
                         .padding()
                 }
             }
