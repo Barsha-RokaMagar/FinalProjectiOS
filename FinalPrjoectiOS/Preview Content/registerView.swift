@@ -11,11 +11,13 @@ struct RegisterView: View {
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var navigateToLogin: Bool = false
+    @State private var showPassword: Bool = false
+    @State private var showConfirmPassword: Bool = false
 
     var body: some View {
         NavigationStack {
             VStack {
-                Image(.usericon)
+                Image("usericon")
                     .resizable()
                     .frame(width: 100, height: 100)
                     .scaledToFit()
@@ -48,16 +50,9 @@ struct RegisterView: View {
                     .padding()
                     .border(Color.black)
                     .multilineTextAlignment(.center)
-                    
-                SecureField("Password", text: $password)
-                    .padding()
-                    .border(Color.black)
-                    .multilineTextAlignment(.center)
-                    
-                SecureField("Confirm Password", text: $confirmPassword)
-                    .padding()
-                    .border(Color.black)
-                    .multilineTextAlignment(.center)
+                
+                PasswordField(placeholder: "Password", text: $password, showPassword: $showPassword)
+                PasswordField(placeholder: "Confirm Password", text: $confirmPassword, showPassword: $showConfirmPassword)
                 
                 Button(action: {
                     if validateFields() {
@@ -66,11 +61,11 @@ struct RegisterView: View {
                 }) {
                     Text("Sign Up")
                         .bold()
-                        .frame(maxWidth: .infinity)
+                        .frame(width: 300, height: 50)
                         .foregroundColor(.white)
-                        .background(Color.blue)
+                        .background(Color.purple)
                         .padding()
-                        .cornerRadius(30)
+                        .cornerRadius(20)
                         .font(.title)
                         .multilineTextAlignment(.center)
                 }
@@ -116,17 +111,21 @@ struct RegisterView: View {
                 self.alertMessage = error.localizedDescription
                 self.showAlert = true
             } else {
-                // Successfully created user, now store additional user data in Realtime Database or Firestore
-                let userData = [
+                guard let user = authResult?.user else {
+                    self.alertMessage = "User creation failed."
+                    self.showAlert = true
+                    return
+                }
+                
+                let userData: [String: Any] = [
                     "username": self.username,
                     "email": self.email,
                     "usertype": self.usertype,
                     "gender": self.gender
                 ]
                 
-                // Example using Realtime Database
                 let ref = Database.database().reference()
-                ref.child("users").child(authResult!.user.uid).setValue(userData) { error, _ in
+                ref.child("users").child(username).setValue(userData) { error, _ in
                     if let error = error {
                         self.alertMessage = "Error saving user data: \(error.localizedDescription)"
                         self.showAlert = true
@@ -138,6 +137,37 @@ struct RegisterView: View {
                 }
             }
         }
+    }
+}
+
+struct PasswordField: View {
+    var placeholder: String
+    @Binding var text: String
+    @Binding var showPassword: Bool
+    
+    var body: some View {
+        ZStack {
+            if showPassword {
+                TextField(placeholder, text: $text)
+                    .padding()
+                    .border(Color.black)
+                    .multilineTextAlignment(.center)
+            } else {
+                SecureField(placeholder, text: $text)
+                    .padding()
+                    .border(Color.black)
+                    .multilineTextAlignment(.center)
+            }
+            HStack {
+                Spacer()
+                Button(action: { showPassword.toggle() }) {
+                    Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                        .foregroundColor(.gray)
+                        .padding()
+                }
+            }
+        }
+    
     }
 }
 
