@@ -15,7 +15,6 @@
 		6E20E4F02C2C495B00997F7E /* FinalPrjoectiOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E4EF2C2C495B00997F7E /* FinalPrjoectiOSUITests.swift */; };
 		6E20E4F22C2C495B00997F7E /* FinalPrjoectiOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E4F12C2C495B00997F7E /* FinalPrjoectiOSUITestsLaunchTests.swift */; };
 		6E20E4FF2C2C4AC700997F7E /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E4FE2C2C4AC700997F7E /* LoginView.swift */; };
-		6E20E5012C2C4B8000997F7E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E20E5002C2C4B7F00997F7E /* GoogleService-Info.plist */; };
 		6E20E5042C2C4BC200997F7E /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 6E20E5032C2C4BC200997F7E /* FirebaseAuth */; };
 		6E20E5062C2C4BC200997F7E /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 6E20E5052C2C4BC200997F7E /* FirebaseDatabase */; };
 		6E20E5082C2C4F0C00997F7E /* SplashScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5072C2C4F0C00997F7E /* SplashScreenView.swift */; };
@@ -23,6 +22,7 @@
 		6E20E50C2C2C4FDB00997F7E /* ResetpwView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E50B2C2C4FDB00997F7E /* ResetpwView.swift */; };
 		6E20E50E2C2C64FC00997F7E /* DoctorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E50D2C2C64FC00997F7E /* DoctorView.swift */; };
 		6E20E5102C2C651500997F7E /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E50F2C2C651500997F7E /* PatientView.swift */; };
+		6E20E5122C60665500997F7E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E20E5112C60665400997F7E /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,12 +54,12 @@
 		6E20E4EF2C2C495B00997F7E /* FinalPrjoectiOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalPrjoectiOSUITests.swift; sourceTree = "<group>"; };
 		6E20E4F12C2C495B00997F7E /* FinalPrjoectiOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinalPrjoectiOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6E20E4FE2C2C4AC700997F7E /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		6E20E5002C2C4B7F00997F7E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6E20E5072C2C4F0C00997F7E /* SplashScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenView.swift; sourceTree = "<group>"; };
 		6E20E5092C2C4F5200997F7E /* registerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = registerView.swift; sourceTree = "<group>"; };
 		6E20E50B2C2C4FDB00997F7E /* ResetpwView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetpwView.swift; sourceTree = "<group>"; };
 		6E20E50D2C2C64FC00997F7E /* DoctorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorView.swift; sourceTree = "<group>"; };
 		6E20E50F2C2C651500997F7E /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
+		6E20E5112C60665400997F7E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +112,7 @@
 		6E20E4D32C2C495900997F7E /* FinalPrjoectiOS */ = {
 			isa = PBXGroup;
 			children = (
-				6E20E5002C2C4B7F00997F7E /* GoogleService-Info.plist */,
+				6E20E5112C60665400997F7E /* GoogleService-Info.plist */,
 				6E20E4D42C2C495900997F7E /* FinalPrjoectiOSApp.swift */,
 				6E20E4D62C2C495900997F7E /* ContentView.swift */,
 				6E20E4D82C2C495B00997F7E /* Assets.xcassets */,
@@ -265,7 +265,7 @@
 			files = (
 				6E20E4DC2C2C495B00997F7E /* Preview Assets.xcassets in Resources */,
 				6E20E4D92C2C495B00997F7E /* Assets.xcassets in Resources */,
-				6E20E5012C2C4B8000997F7E /* GoogleService-Info.plist in Resources */,
+				6E20E5122C60665500997F7E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

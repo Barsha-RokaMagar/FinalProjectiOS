@@ -8,7 +8,6 @@ struct LoginView: View {
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var navigateToView: Bool = false
-    @State private var destinationView: AnyView? = nil
     @State private var navigateToResetPassword: Bool = false
     @Binding var isLoggedIn: Bool
 
@@ -20,7 +19,7 @@ struct LoginView: View {
                     .font(.custom("AmericanTypewriter", fixedSize: 36))
                     .padding()
 
-                Image(.welcome)
+                Image(.welcome) 
                     .resizable()
                     .scaledToFit()
                     .padding()
@@ -76,17 +75,20 @@ struct LoginView: View {
                     .padding()
                 }
 
+                // Single NavigationLink for dynamic destination
                 NavigationLink(
                     destination: destinationView,
-                    isActive: $navigateToView,
-                    label: { EmptyView() }
-                )
-                
+                    isActive: $navigateToView
+                ) {
+                    EmptyView()
+                }
+
                 NavigationLink(
                     destination: ResetpwView(),
-                    isActive: $navigateToResetPassword,
-                    label: { EmptyView() }
-                )
+                    isActive: $navigateToResetPassword
+                ) {
+                    EmptyView()
+                }
             }
             .padding()
             .navigationTitle("")
@@ -99,20 +101,24 @@ struct LoginView: View {
                 alertMessage = error.localizedDescription
                 showAlert = true
             } else {
-                if usertype == "Doctor" {
-                    destinationView = AnyView(DoctorView())
-                } else {
-                    destinationView = AnyView(PatientView())
-                }
+                isLoggedIn = true
                 navigateToView = true
             }
         }
     }
 
-    private func forgotPassword() {
-        navigateToResetPassword = true
+    private var destinationView: some View {
+        switch usertype {
+        case "Doctor":
+            return AnyView(DoctorView())
+        case "Patient":
+            return AnyView(PatientView())
+        default:
+            return AnyView(Text("Unknown user type"))
+        }
     }
 }
+
 
 struct LoginView_Previews: PreviewProvider {
     @State static var isLoggedIn = false

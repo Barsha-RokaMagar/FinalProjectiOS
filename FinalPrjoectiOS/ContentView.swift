@@ -9,7 +9,7 @@ struct ContentView: View {
             if isLoggedIn {
                 NavigationView {
                     if isLoggedIn {
-                        Text("User is logged in") // Placeholder; you can replace this with your main app view
+                        Text("User is logged in") 
                     } else {
                         LoginView(isLoggedIn: $isLoggedIn)
                     }
