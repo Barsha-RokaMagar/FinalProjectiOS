@@ -29,11 +29,15 @@ struct PatientView: View {
                         }
                         NavigationLink(destination: DentistView()) {
                             SpecialistButton(icon: "bandage.fill", title: "Dentist")
-                                               }
-                        SpecialistButton(icon: "person.2.fill", title: "Psychologist")
+                            }
+                        NavigationLink(destination: PsychologistView()) {
+                            SpecialistButton(icon: "person.2.fill", title: "Psychologist")
+                        }
                     }
                     HStack {
-                        SpecialistButton(icon: "pills.fill", title: "Dermatologist")
+                        NavigationLink(destination: DermatologistView()) {
+                            SpecialistButton(icon: "pills.fill", title: "Dermatologist")
+                                               }
                         SpecialistButton(icon: "person.fill", title: "Pediatrician")
                         SpecialistButton(icon: "eye.fill", title: "Ophthalmologist")
                     }

@@ -25,6 +25,8 @@
 		6E20E5122C60665500997F7E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6E20E5112C60665400997F7E /* GoogleService-Info.plist */; };
 		6E20E5142C61255D00997F7E /* CardiologistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5132C61255D00997F7E /* CardiologistView.swift */; };
 		6E20E5162C61604300997F7E /* DentistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5152C61604300997F7E /* DentistView.swift */; };
+		6E20E5182C616D1B00997F7E /* PsychologistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5172C616D1B00997F7E /* PsychologistView.swift */; };
+		6E20E51A2C616D3F00997F7E /* DermatologistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5192C616D3F00997F7E /* DermatologistView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		6E20E5112C60665400997F7E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6E20E5132C61255D00997F7E /* CardiologistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardiologistView.swift; sourceTree = "<group>"; };
 		6E20E5152C61604300997F7E /* DentistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DentistView.swift; sourceTree = "<group>"; };
+		6E20E5172C616D1B00997F7E /* PsychologistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PsychologistView.swift; sourceTree = "<group>"; };
+		6E20E5192C616D3F00997F7E /* DermatologistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DermatologistView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +141,8 @@
 				6E20E50D2C2C64FC00997F7E /* DoctorView.swift */,
 				6E20E50F2C2C651500997F7E /* PatientView.swift */,
 				6E20E5132C61255D00997F7E /* CardiologistView.swift */,
+				6E20E5172C616D1B00997F7E /* PsychologistView.swift */,
+				6E20E5192C616D3F00997F7E /* DermatologistView.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -301,8 +307,10 @@
 				6E20E50A2C2C4F5200997F7E /* registerView.swift in Sources */,
 				6E20E4D72C2C495900997F7E /* ContentView.swift in Sources */,
 				6E20E5162C61604300997F7E /* DentistView.swift in Sources */,
+				6E20E5182C616D1B00997F7E /* PsychologistView.swift in Sources */,
 				6E20E5102C2C651500997F7E /* PatientView.swift in Sources */,
 				6E20E4D52C2C495900997F7E /* FinalPrjoectiOSApp.swift in Sources */,
+				6E20E51A2C616D3F00997F7E /* DermatologistView.swift in Sources */,
 				6E20E5082C2C4F0C00997F7E /* SplashScreenView.swift in Sources */,
 				6E20E50E2C2C64FC00997F7E /* DoctorView.swift in Sources */,
 				6E20E5142C61255D00997F7E /* CardiologistView.swift in Sources */,
