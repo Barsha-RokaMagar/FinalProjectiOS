@@ -19,7 +19,7 @@ struct LoginView: View {
                     .font(.custom("AmericanTypewriter", fixedSize: 36))
                     .padding()
 
-                Image(.welcome) 
+                Image("welcome") // Ensure this image exists in your assets
                     .resizable()
                     .scaledToFit()
                     .padding()
@@ -62,7 +62,7 @@ struct LoginView: View {
 
                 HStack {
                     Text("New user?")
-                    NavigationLink(destination: RegisterView()) {
+                    NavigationLink(destination: registerView(isLoggedIn: $isLoggedIn)) {
                         Text("Sign Up").foregroundColor(.blue)
                     }
 
@@ -75,7 +75,7 @@ struct LoginView: View {
                     .padding()
                 }
 
-                // Single NavigationLink for dynamic destination
+                // NavigationLink for dynamic destination
                 NavigationLink(
                     destination: destinationView,
                     isActive: $navigateToView
@@ -83,6 +83,7 @@ struct LoginView: View {
                     EmptyView()
                 }
 
+                // NavigationLink for ResetpwView
                 NavigationLink(
                     destination: ResetpwView(),
                     isActive: $navigateToResetPassword
@@ -118,7 +119,6 @@ struct LoginView: View {
         }
     }
 }
-
 
 struct LoginView_Previews: PreviewProvider {
     @State static var isLoggedIn = false
