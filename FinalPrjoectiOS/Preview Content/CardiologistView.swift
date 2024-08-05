@@ -14,10 +14,11 @@ struct CardiologistView: View {
     
     var body: some View {
         VStack {
-            Image("heart")
+            Image(systemName:"heart.fill")
                 .resizable()
-                .frame(width: 200, height: 80)
+                .frame(width: 150, height: 100)
                 .padding(.top, 16)
+                .foregroundColor(.red)
             
             Text("Doctor Selection and Appointment")
                 .font(.headline)

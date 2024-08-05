@@ -27,7 +27,9 @@ struct PatientView: View {
                         NavigationLink(destination: CardiologistView()) {
                             SpecialistButton(icon: "heart.fill", title: "Cardiologist")
                         }
-                        SpecialistButton(icon: "bandage.fill", title: "Dentist")
+                        NavigationLink(destination: DentistView()) {
+                            SpecialistButton(icon: "bandage.fill", title: "Dentist")
+                                               }
                         SpecialistButton(icon: "person.2.fill", title: "Psychologist")
                     }
                     HStack {
