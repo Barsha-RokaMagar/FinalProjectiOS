@@ -9,7 +9,7 @@ struct LoginView: View {
     @State private var alertMessage: String = ""
     @State private var navigateToView: Bool = false
     @State private var navigateToResetPassword: Bool = false
-    @State private var destinationView: AnyView? = nil // Updated to be optional
+    @State private var destinationView: AnyView? = nil
     @Binding var isLoggedIn: Bool
 
     var body: some View {
@@ -20,7 +20,7 @@ struct LoginView: View {
                     .font(.custom("AmericanTypewriter", fixedSize: 36))
                     .padding()
 
-                Image("welcome") // Ensure this image exists in your assets
+                Image(.welcome)
                     .resizable()
                     .scaledToFit()
                     .padding()
@@ -76,7 +76,7 @@ struct LoginView: View {
                     .padding()
                 }
 
-                // NavigationLink for dynamic destination
+               
                 NavigationLink(
                     destination: destinationView,
                     isActive: $navigateToView
@@ -84,7 +84,6 @@ struct LoginView: View {
                     EmptyView()
                 }
 
-                // NavigationLink for ResetpwView
                 NavigationLink(
                     destination: ResetpwView(),
                     isActive: $navigateToResetPassword

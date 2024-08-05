@@ -145,8 +145,8 @@ struct registerView: View {
                     } else {
                         alertMessage = "Sign Up Successful"
                         showAlert = true
-                        isLoggedIn = true // Update this after successful registration
-                        navigateToLogin = true // Trigger navigation to LoginView
+                        isLoggedIn = true
+                        navigateToLogin = true 
                     }
                 }
             }
