@@ -12,19 +12,20 @@ struct registerView: View {
     @State private var showSpecialty = true
     @State private var showAlert = false
     @State private var alertMessage = ""
+    @State private var navigateToLogin = false
     @Binding var isLoggedIn: Bool
 
     var body: some View {
         NavigationStack {
             VStack {
-                Image(.usericon) // Ensure this image exists in your assets
+                Image(.usericon)
                     .resizable()
                     .frame(width: 100, height: 100)
                 
                 Text("Create New Account")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(.green)) // Ensure you have this color defined
+                    .foregroundColor(Color(.green)) 
                     .padding(.bottom, 30)
                 
                 TextField("Name", text: $name)
@@ -78,7 +79,7 @@ struct registerView: View {
                     .padding(.bottom, 10)
                 
                 Button(action: signUp) {
-                    Text("SignUp")
+                    Text("Sign Up")
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .padding()
                         .background(Color.blue)
@@ -87,10 +88,16 @@ struct registerView: View {
                 }
                 .padding(.top, 35)
                 
+                NavigationLink(destination: LoginView(isLoggedIn: $isLoggedIn), isActive: $navigateToLogin) {
+                    EmptyView()
+                }
+                
+                Text("Already have an account?")
+                    .padding(.top, 20)
+                
                 NavigationLink(destination: LoginView(isLoggedIn: $isLoggedIn)) {
-                    Text("Already have an account? Login")
+                    Text("Login")
                         .foregroundColor(.black)
-                        .padding(.top, 20)
                 }
             }
             .padding()
@@ -119,7 +126,7 @@ struct registerView: View {
                 showAlert = true
             } else {
                 guard let uid = authResult?.user.uid else { return }
-                let user = [
+                let userData: [String: Any] = [
                     "name": name,
                     "email": email,
                     "username": username,
@@ -128,16 +135,18 @@ struct registerView: View {
                     "gender": gender,
                     "specialty": specialty,
                     "appointments": [String]()
-                ] as [String : Any]
+                ]
                 
-                Database.database().reference().child("users").child(uid).setValue(user) { error, _ in
+                let ref = Database.database().reference()
+                ref.child("users").child(username).setValue(userData) { error, _ in
                     if let error = error {
-                        alertMessage = "User registration failed: \(error.localizedDescription)"
+                        alertMessage = "Error saving user data: \(error.localizedDescription)"
                         showAlert = true
                     } else {
-                        alertMessage = "User registered successfully"
+                        alertMessage = "Sign Up Successful"
                         showAlert = true
                         isLoggedIn = true // Update this after successful registration
+                        navigateToLogin = true // Trigger navigation to LoginView
                     }
                 }
             }

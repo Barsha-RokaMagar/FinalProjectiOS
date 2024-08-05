@@ -9,6 +9,7 @@ struct LoginView: View {
     @State private var alertMessage: String = ""
     @State private var navigateToView: Bool = false
     @State private var navigateToResetPassword: Bool = false
+    @State private var destinationView: AnyView? = nil // Updated to be optional
     @Binding var isLoggedIn: Bool
 
     var body: some View {
@@ -102,20 +103,13 @@ struct LoginView: View {
                 alertMessage = error.localizedDescription
                 showAlert = true
             } else {
-                isLoggedIn = true
+                if usertype == "Doctor" {
+                    destinationView = AnyView(DoctorView())
+                } else {
+                    destinationView = AnyView(PatientView())
+                }
                 navigateToView = true
             }
-        }
-    }
-
-    private var destinationView: some View {
-        switch usertype {
-        case "Doctor":
-            return AnyView(DoctorView())
-        case "Patient":
-            return AnyView(PatientView())
-        default:
-            return AnyView(Text("Unknown user type"))
         }
     }
 }
