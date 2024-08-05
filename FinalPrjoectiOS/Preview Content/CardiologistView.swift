@@ -14,7 +14,7 @@ struct CardiologistView: View {
     
     var body: some View {
         VStack {
-            Image(systemName:"heart.fill")
+            Image(systemName: "heart.fill")
                 .resizable()
                 .frame(width: 150, height: 100)
                 .padding(.top, 16)
@@ -38,9 +38,9 @@ struct CardiologistView: View {
                             }
                         }
                     }
+                    .padding()
+                    .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
                 }
-                .padding()
-                .background(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
             }
             .padding()
             
@@ -75,17 +75,6 @@ struct CardiologistView: View {
             }
             .padding(.horizontal, 16)
             
-            Button(action: goBack) {
-                Text("Go Back")
-                    .bold()
-                    .frame(maxWidth: .infinity, minHeight: 50)
-                    .foregroundColor(.white)
-                    .background(Color.blue)
-                    .cornerRadius(10)
-                    .padding(.top, 8)
-            }
-            .padding(.horizontal, 16)
-            
             Spacer()
         }
         .onAppear(perform: loadCardiologists)
@@ -93,16 +82,22 @@ struct CardiologistView: View {
     }
     
     private func loadCardiologists() {
-        let cardiologistRef = Database.database().reference().child("cardiologists")
-        cardiologistRef.observe(.value) { snapshot in
+        let usersRef = Database.database().reference().child("users")
+        
+        usersRef.observe(.value) { snapshot in
             var newCardiologists = [String]()
+            
             for child in snapshot.children {
                 if let snapshot = child as? DataSnapshot,
-                   let dict = snapshot.value as? [String: Any],
-                   let name = dict["name"] as? String {
-                    newCardiologists.append(name)
+                   let dict = snapshot.value as? [String: Any] {
+                    
+                    if let specialty = dict["specialty"] as? String, specialty == "Cardiologist",
+                       let name = dict["name"] as? String {
+                        newCardiologists.append(name)
+                    }
                 }
             }
+            
             self.cardiologists = newCardiologists
         }
     }
@@ -140,10 +135,6 @@ struct CardiologistView: View {
                 self.showAlert = true
             }
         }
-    }
-    
-    private func goBack() {
-        self.presentationMode.wrappedValue.dismiss()
     }
 }
 
