@@ -18,14 +18,14 @@ struct registerView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image(.usericon)
+                Image(.usericon) 
                     .resizable()
                     .frame(width: 100, height: 100)
                 
                 Text("Create New Account")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(.green)) 
+                    .foregroundColor(Color(.green))
                     .padding(.bottom, 30)
                 
                 TextField("Name", text: $name)
@@ -87,11 +87,17 @@ struct registerView: View {
                         .cornerRadius(5)
                 }
                 .padding(.top, 35)
-                
-                NavigationLink(destination: LoginView(isLoggedIn: $isLoggedIn), isActive: $navigateToLogin) {
+                .alert(isPresented: $showAlert) {
+                    Alert(title: Text("Alert"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+                }
+
+                NavigationLink(
+                    destination: LoginView(isLoggedIn: $isLoggedIn),
+                    isActive: $navigateToLogin
+                ) {
                     EmptyView()
                 }
-                
+
                 Text("Already have an account?")
                     .padding(.top, 20)
                 
@@ -101,9 +107,6 @@ struct registerView: View {
                 }
             }
             .padding()
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Alert"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
-            }
         }
     }
     
@@ -146,7 +149,9 @@ struct registerView: View {
                         alertMessage = "Sign Up Successful"
                         showAlert = true
                         isLoggedIn = true
-                        navigateToLogin = true 
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Delay to allow alert dismissal
+                            navigateToLogin = true
+                        }
                     }
                 }
             }
@@ -160,3 +165,4 @@ struct registerView_Previews: PreviewProvider {
         registerView(isLoggedIn: $isLoggedIn)
     }
 }
+
