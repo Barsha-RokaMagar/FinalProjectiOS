@@ -36,9 +36,13 @@ struct CardiologistView: View {
                     ScrollView {
                         VStack(alignment: .leading) {
                             ForEach(cardiologists, id: \.self) { cardiologist in
-                                RadioButton(text: cardiologist, isSelected: self.selectedCardiologist == cardiologist) {
-                                    self.selectedCardiologist = cardiologist
-                                }
+                                RadioButtonView(
+                                    text: cardiologist,
+                                    isSelected: self.selectedCardiologist == cardiologist,
+                                    action: {
+                                        self.selectedCardiologist = cardiologist
+                                    }
+                                )
                             }
                         }
                         .padding()
@@ -145,7 +149,7 @@ struct CardiologistView: View {
                     id: appointmentRef.key ?? "",
                     date: date,
                     time: time,
-                    cardiologist: selectedCardiologist,
+                    doctor: selectedCardiologist,
                     patientId: patientId,
                     patientName: patientName
                 )
@@ -155,31 +159,8 @@ struct CardiologistView: View {
     }
 }
 
-struct RadioButton: View {
-    let text: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        HStack {
-            Image(systemName: isSelected ? "largecircle.fill.circle" : "circle")
-                .onTapGesture {
-                    action()
-                }
-            Text(text)
-                .onTapGesture {
-                    action()
-                }
-        }
-        .padding()
-        .background(isSelected ? Color.gray.opacity(0.2) : Color.clear)
-        .cornerRadius(10)
-    }
-}
-
 struct CardiologistView_Previews: PreviewProvider {
     static var previews: some View {
         CardiologistView()
     }
 }
-

@@ -15,7 +15,7 @@ struct AppointmentDetailsView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Patient: \(appointment.patientName)")
                         .font(.title2)
-                    Text("Doctor: \(appointment.cardiologist)")
+                    Text("Doctor: \(appointment.doctor)") 
                         .font(.title2)
                     Text("Date: \(appointment.date)")
                         .font(.title2)
@@ -55,7 +55,7 @@ struct Appointment: Identifiable {
     var id: String
     var date: String
     var time: String
-    var cardiologist: String
+    var doctor: String // Changed from 'cardiologist' to 'doctor'
     var patientId: String
     var patientName: String
 }
@@ -66,7 +66,7 @@ struct AppointmentDetailsView_Previews: PreviewProvider {
             id: "1",
             date: "Aug 5, 2024",
             time: "10:00 AM",
-            cardiologist: "Dr. John Doe",
+            doctor: "Dr. John Doe", // Changed from 'cardiologist' to 'doctor'
             patientId: "abc123",
             patientName: "Jane Doe"
         ))
