@@ -73,7 +73,7 @@ struct PsychologistView: View {
                         .bold()
                         .frame(maxWidth: .infinity, minHeight: 50)
                         .foregroundColor(.white)
-                        .background(Color.purple)
+                        .background(Color.blue)
                         .cornerRadius(10)
                         .padding(.top, 8)
                 }
