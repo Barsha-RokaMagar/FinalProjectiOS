@@ -17,7 +17,7 @@ struct PsychologistView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image(systemName: "brain.head.profile")
+                Image(systemName: "person.2.fill")
                     .resizable()
                     .frame(width: 150, height: 100)
                     .padding(.top, 16)
