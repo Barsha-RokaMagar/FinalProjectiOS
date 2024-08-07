@@ -55,7 +55,7 @@ struct Appointment: Identifiable {
     var id: String
     var date: String
     var time: String
-    var doctor: String // Changed from 'cardiologist' to 'doctor'
+    var doctor: String
     var patientId: String
     var patientName: String
 }
@@ -63,12 +63,12 @@ struct Appointment: Identifiable {
 struct AppointmentDetailsView_Previews: PreviewProvider {
     static var previews: some View {
         AppointmentDetailsView(appointment: Appointment(
-            id: "1",
-            date: "Aug 5, 2024",
-            time: "10:00 AM",
-            doctor: "Dr. John Doe", // Changed from 'cardiologist' to 'doctor'
-            patientId: "abc123",
-            patientName: "Jane Doe"
+            id: " ",
+            date: " ",
+            time: " ",
+            doctor: " ",
+            patientId: " ",
+            patientName: " "
         ))
     }
 }

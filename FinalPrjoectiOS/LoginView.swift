@@ -76,7 +76,6 @@ struct LoginView: View {
                     .padding()
                 }
 
-               
                 NavigationLink(
                     destination: destinationView,
                     isActive: $navigateToView
@@ -108,6 +107,7 @@ struct LoginView: View {
                     destinationView = AnyView(PatientView())
                 }
                 navigateToView = true
+                isLoggedIn = true 
             }
         }
     }

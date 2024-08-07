@@ -129,6 +129,16 @@ struct registerView: View {
                 showAlert = true
             } else {
                 guard let uid = authResult?.user.uid else { return }
+                
+                // Update display name
+                let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+                changeRequest?.displayName = username
+                changeRequest?.commitChanges { error in
+                    if let error = error {
+                        print("Error updating display name: \(error.localizedDescription)")
+                    }
+                }
+                
                 let userData: [String: Any] = [
                     "name": name,
                     "email": email,
@@ -141,7 +151,7 @@ struct registerView: View {
                 ]
                 
                 let ref = Database.database().reference()
-                ref.child("users").child(username).setValue(userData) { error, _ in
+                ref.child("users").child(uid).setValue(userData) { error, _ in
                     if let error = error {
                         alertMessage = "Error saving user data: \(error.localizedDescription)"
                         showAlert = true
@@ -149,7 +159,7 @@ struct registerView: View {
                         alertMessage = "Sign Up Successful"
                         showAlert = true
                         isLoggedIn = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { // Delay to allow alert dismissal
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                             navigateToLogin = true
                         }
                     }
@@ -158,6 +168,7 @@ struct registerView: View {
         }
     }
 }
+
 
 struct registerView_Previews: PreviewProvider {
     @State static var isLoggedIn = false
