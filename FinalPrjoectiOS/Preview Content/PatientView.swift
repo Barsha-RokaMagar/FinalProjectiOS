@@ -15,7 +15,7 @@ struct PatientView: View {
                     .italic()
                     .padding(.bottom, 20)
                 
-                Image("patients")
+                Image("patients") // Adjust this if you have a different image
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)
@@ -90,33 +90,31 @@ struct PatientView: View {
             print("Error signing out: %@", signOutError.localizedDescription)
         }
     }
+}
+
+struct SpecialistButton: View {
+    var icon: String
+    var title: String
     
-    struct SpecialistButton: View {
-        var icon: String
-        var title: String
-        
-        var body: some View {
-            VStack {
-                Image(systemName: icon)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 50)
-                Text(title)
-                    .font(.subheadline)
-                    .multilineTextAlignment(.center)
-            }
-            .padding()
-            .frame(maxWidth: .infinity, minHeight: 100)
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(10)
+    var body: some View {
+        VStack {
+            Image(systemName: icon)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 50, height: 50)
+            Text(title)
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
         }
+        .padding()
+        .frame(maxWidth: .infinity, minHeight: 100)
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
     }
 }
-    
-    
-    struct PatientView_Previews: PreviewProvider {
-        static var previews: some View {
-            PatientView()
-        }
-    }
 
+struct PatientView_Previews: PreviewProvider {
+    static var previews: some View {
+        PatientView()
+    }
+}
