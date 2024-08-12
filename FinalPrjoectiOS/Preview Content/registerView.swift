@@ -18,14 +18,14 @@ struct registerView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image(.usericon) 
+                Image(.usericon)
                     .resizable()
                     .frame(width: 100, height: 100)
                 
                 Text("Create New Account")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(Color(.green))
+                    .foregroundColor(Color(.systemGreen))
                     .padding(.bottom, 30)
                 
                 TextField("Name", text: $name)
@@ -130,7 +130,6 @@ struct registerView: View {
             } else {
                 guard let uid = authResult?.user.uid else { return }
                 
-                // Update display name
                 let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
                 changeRequest?.displayName = username
                 changeRequest?.commitChanges { error in
@@ -143,7 +142,6 @@ struct registerView: View {
                     "name": name,
                     "email": email,
                     "username": username,
-                    "password": password,
                     "userType": userType,
                     "gender": gender,
                     "specialty": specialty,
@@ -176,4 +174,3 @@ struct registerView_Previews: PreviewProvider {
         registerView(isLoggedIn: $isLoggedIn)
     }
 }
-

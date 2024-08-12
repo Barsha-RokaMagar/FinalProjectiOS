@@ -1,6 +1,9 @@
 import SwiftUI
+import Firebase
 
 struct PatientView: View {
+    @State private var navigateToLogin = false
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -15,7 +18,7 @@ struct PatientView: View {
                 Image(.patients)
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 150 ,height: 150)
+                    .frame(width: 150, height: 150)
                     .padding(.bottom, 20)
                 
                 Text("Select the specialist of your choice and proceed to schedule an appointment.")
@@ -52,26 +55,38 @@ struct PatientView: View {
                         NavigationLink(destination: GynecologistView()) {
                             SpecialistButton(icon: "staroflife.fill", title: "Gynecologist")
                         }
-                      }
                     }
-                    .padding()
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        
-                    }) {
-                        Text("Logout")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    .padding(.bottom)
                 }
+                .padding()
                 
+                Spacer()
+                
+                Button(action: logout) {
+                    Text("Logout")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding(.bottom)
+                .background(
+                    NavigationLink(
+                        destination: LoginView(isLoggedIn: .constant(false)),
+                        isActive: $navigateToLogin,
+                        label: { EmptyView() }
+                    )
+                )
             }
+        }
+    }
+    
+    private func logout() {
+        do {
+            try Auth.auth().signOut()
+            navigateToLogin = true
+        } catch let signOutError as NSError {
+            print("Error signing out: %@", signOutError.localizedDescription)
         }
     }
     
@@ -96,12 +111,9 @@ struct PatientView: View {
         }
     }
     
-    
-    
     struct PatientView_Previews: PreviewProvider {
         static var previews: some View {
             PatientView()
         }
     }
-
-
+}

@@ -107,7 +107,7 @@ struct LoginView: View {
                     destinationView = AnyView(PatientView())
                 }
                 navigateToView = true
-                isLoggedIn = true 
+                
             }
         }
     }
