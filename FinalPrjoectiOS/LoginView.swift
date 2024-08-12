@@ -8,7 +8,7 @@ struct LoginView: View {
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
     @State private var navigateToView: Bool = false
-    @State private var navigateToResetPassword: Bool = false
+    @State private var showResetPasswordView = false
     @State private var destinationView: AnyView? = nil
     @Binding var isLoggedIn: Bool
 
@@ -68,7 +68,7 @@ struct LoginView: View {
                     }
 
                     Button(action: {
-                        navigateToResetPassword = true
+                        showResetPasswordView = true
                     }) {
                         Text("Forgot Password")
                             .foregroundColor(.blue)
@@ -85,7 +85,7 @@ struct LoginView: View {
 
                 NavigationLink(
                     destination: ResetpwView(),
-                    isActive: $navigateToResetPassword
+                    isActive: $showResetPasswordView
                 ) {
                     EmptyView()
                 }
@@ -107,7 +107,6 @@ struct LoginView: View {
                     destinationView = AnyView(PatientView())
                 }
                 navigateToView = true
-                
             }
         }
     }

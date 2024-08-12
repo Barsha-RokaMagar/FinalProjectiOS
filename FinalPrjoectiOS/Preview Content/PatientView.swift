@@ -15,10 +15,10 @@ struct PatientView: View {
                     .italic()
                     .padding(.bottom, 20)
                 
-                Image(.patients)
+                Image("patients")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 150, height: 150)
+                    .frame(width: 100, height: 100)
                     .padding(.bottom, 20)
                 
                 Text("Select the specialist of your choice and proceed to schedule an appointment.")
@@ -45,7 +45,7 @@ struct PatientView: View {
                             SpecialistButton(icon: "person.fill", title: "Pediatrician")
                         }
                         NavigationLink(destination: OpthalmologistView()) {
-                            SpecialistButton(icon: "eye.fill", title: "Ophthalmologist")
+                            SpecialistButton(icon: "eye.fill", title: "Opthalmologist")
                         }
                     }
                     HStack {
@@ -78,6 +78,7 @@ struct PatientView: View {
                     )
                 )
             }
+            .navigationTitle("Patient Dashboard")
         }
     }
     
@@ -110,10 +111,12 @@ struct PatientView: View {
             .cornerRadius(10)
         }
     }
+}
+    
     
     struct PatientView_Previews: PreviewProvider {
         static var previews: some View {
             PatientView()
         }
     }
-}
+

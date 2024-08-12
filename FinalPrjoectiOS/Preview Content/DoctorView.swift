@@ -14,6 +14,7 @@ struct DoctorView: View {
     @State private var isShowingLoginView = false
 
     var body: some View {
+
         NavigationView {
             VStack {
                 Image("doctor")
@@ -138,7 +139,7 @@ struct DoctorView: View {
         
         existingAvailability = "Date: \(date), Start: \(start), End: \(end)"
         
-        // Save availability to Firebase
+        
         guard let doctorId = Auth.auth().currentUser?.uid else {
             alertMessage = "No user logged in."
             showAlert = true
@@ -213,6 +214,8 @@ struct DoctorView: View {
             alertMessage = "Error signing out: \(signOutError.localizedDescription)"
             showAlert = true
         }
+
+
     }
 }
 

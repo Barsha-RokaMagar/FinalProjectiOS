@@ -5,20 +5,23 @@ struct registerView: View {
     @State private var name = ""
     @State private var username = ""
     @State private var password = ""
+    @State private var confirmPassword = ""
     @State private var email = ""
     @State private var specialty = ""
-    @State private var userType = "Doctor"
+    @State private var userType = "Patient"
     @State private var gender = "Male"
-    @State private var showSpecialty = true
+    @State private var showSpecialty = false
     @State private var showAlert = false
     @State private var alertMessage = ""
     @State private var navigateToLogin = false
+    @State private var showPassword = false
+    @State private var showConfirmPassword = false
     @Binding var isLoggedIn: Bool
 
     var body: some View {
         NavigationStack {
             VStack {
-                Image(.usericon)
+                Image("usericon")
                     .resizable()
                     .frame(width: 100, height: 100)
                 
@@ -72,19 +75,18 @@ struct registerView: View {
                     .cornerRadius(5)
                     .padding(.bottom, 10)
                 
-                SecureField("Password", text: $password)
-                    .padding()
-                    .background(Color.gray.opacity(0.2))
-                    .cornerRadius(5)
-                    .padding(.bottom, 10)
+                PasswordField(placeholder: "Password", text: $password, showPassword: $showPassword)
+                PasswordField(placeholder: "Confirm Password", text: $confirmPassword, showPassword: $showConfirmPassword)
                 
                 Button(action: signUp) {
                     Text("Sign Up")
                         .frame(minWidth: 0, maxWidth: .infinity)
                         .padding()
-                        .background(Color.blue)
+                        .background(Color.purple)
                         .foregroundColor(.white)
-                        .cornerRadius(5)
+                        .cornerRadius(20)
+                        .font(.title)
+                        .multilineTextAlignment(.center)
                 }
                 .padding(.top, 35)
                 .alert(isPresented: $showAlert) {
@@ -111,8 +113,8 @@ struct registerView: View {
     }
     
     private func signUp() {
-        guard !name.isEmpty, !email.isEmpty, !username.isEmpty, !password.isEmpty else {
-            alertMessage = "Please fill all fields"
+        guard !name.isEmpty, !email.isEmpty, !username.isEmpty, !password.isEmpty, password == confirmPassword else {
+            alertMessage = "Please fill all fields and ensure passwords match"
             showAlert = true
             return
         }
@@ -167,9 +169,41 @@ struct registerView: View {
     }
 }
 
+struct PasswordField: View {
+    var placeholder: String
+    @Binding var text: String
+    @Binding var showPassword: Bool
+    
+    var body: some View {
+        ZStack {
+            if showPassword {
+                TextField(placeholder, text: $text)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(5)
+                    .multilineTextAlignment(.center)
+            } else {
+                SecureField(placeholder, text: $text)
+                    .padding()
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(5)
+                    .multilineTextAlignment(.center)
+            }
+            HStack {
+                Spacer()
+                Button(action: { showPassword.toggle() }) {
+                    Image(systemName: showPassword ? "eye.slash.fill" : "eye.fill")
+                        .foregroundColor(.gray)
+                        .padding()
+                }
+            }
+        }
+    }
+}
 
 struct registerView_Previews: PreviewProvider {
     @State static var isLoggedIn = false
+
     static var previews: some View {
         registerView(isLoggedIn: $isLoggedIn)
     }

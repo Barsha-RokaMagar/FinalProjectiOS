@@ -11,10 +11,11 @@ struct ResetpwView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Image(.resetpw)
+                Image(.resetpw) 
                     .resizable()
                     .frame(width: 200, height: 200)
                     .scaledToFit()
+                
                 Text("Reset Password")
                     .bold()
                     .font(.custom("AmericanTypewriter", fixedSize: 35))
@@ -22,19 +23,19 @@ struct ResetpwView: View {
                 
                 TextField("Email", text: $email)
                     .padding()
-                    .border(Color.black)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(5)
                     .multilineTextAlignment(.center)
-                    .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                    .font(.title)
                     .padding()
                 
                 
-                
                 Button(action: resetPassword) {
-                    Text("Reset")
+                    Text("Reset Password")
                         .bold()
-                        .frame(width: 365 ,height: 50)
+                        .frame(width: 370, height: 50)
                         .foregroundColor(.white)
-                        .background(Color.blue)
+                        .background(Color.purple)
                         .padding()
                         .cornerRadius(20)
                         .font(.title)
@@ -47,7 +48,7 @@ struct ResetpwView: View {
                 NavigationLink(destination: LoginView(isLoggedIn: .constant(false))) {
                     Text("Back to Login")
                         .foregroundColor(.blue)
-                        .font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+                        .font(.title)
                         .padding()
                 }
             }
@@ -56,6 +57,11 @@ struct ResetpwView: View {
     }
 
     private func resetPassword() {
+        guard !email.isEmpty else {
+            alertMessage = "Please enter your email."
+            showAlert = true
+            return
+        }
         
         if newPassword == confirmPassword {
             Auth.auth().sendPasswordReset(withEmail: email) { error in
@@ -72,7 +78,6 @@ struct ResetpwView: View {
         }
     }
 }
-
 
 struct ResetpwView_Previews: PreviewProvider {
     static var previews: some View {
