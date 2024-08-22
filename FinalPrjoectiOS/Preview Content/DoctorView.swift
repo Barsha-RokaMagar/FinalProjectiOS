@@ -5,57 +5,51 @@ struct DoctorView: View {
     @State private var selectedDate = Date()
     @State private var startTime = Date()
     @State private var endTime = Date()
-    @State private var existingAvailability: String = "No availability set"
+    @State private var currentAvailability: String = "No availability set"
+    @State private var appointments: [Appointment] = []
+    @State private var doctorName: String = ""
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
-    @State private var appointments: [Appointment] = []
     
     @Environment(\.presentationMode) var presentationMode
     @State private var isShowingLoginView = false
 
     var body: some View {
-
         NavigationView {
             VStack {
-                Image("doctor")
+                Image(.doctor)
                     .resizable()
                     .frame(width: 100, height: 100)
                     .clipShape(Circle())
                     .padding(.top, 16)
-                
+
                 Text("Healthy Life Clinic")
                     .font(.title)
                     .fontWeight(.bold)
                     .padding(.top, 8)
                 
-                Text("Welcome! Doctor")
+                Text("Welcome, Dr. \(doctorName)")
                     .font(.title2)
                     .padding(.top, 4)
-                
+
                 VStack(alignment: .leading) {
                     Text("Set your availability")
                         .font(.headline)
                         .padding(.bottom, 8)
                     
-                    HStack {
-                        DatePicker("Date", selection: $selectedDate, displayedComponents: .date)
-                            .padding()
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
-                    }
+                    DatePicker("Date", selection: $selectedDate, displayedComponents: .date)
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
                     
-                    HStack {
-                        DatePicker("Start Time", selection: $startTime, displayedComponents: .hourAndMinute)
-                            .padding()
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
-                    }
-                    .padding(.top, 8)
+                    DatePicker("Start Time", selection: $startTime, displayedComponents: .hourAndMinute)
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                        .padding(.top, 8)
                     
-                    HStack {
-                        DatePicker("End Time", selection: $endTime, displayedComponents: .hourAndMinute)
-                            .padding()
-                            .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
-                    }
-                    .padding(.top, 8)
+                    DatePicker("End Time", selection: $endTime, displayedComponents: .hourAndMinute)
+                        .padding()
+                        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray))
+                        .padding(.top, 8)
                     
                     Button(action: saveAvailability) {
                         Text("Save")
@@ -81,7 +75,7 @@ struct DoctorView: View {
                         .font(.subheadline)
                         .padding(.top, 8)
                     
-                    Text(existingAvailability)
+                    Text(currentAvailability)
                         .italic()
                         .padding(.top, 4)
                     
@@ -124,10 +118,66 @@ struct DoctorView: View {
                     EmptyView()
                 }
             )
-            .onAppear(perform: loadAppointments)
+            .onAppear(perform: loadPatientDetails)
         }
     }
-    
+
+    private func loadPatientDetails() {
+        guard let doctorId = Auth.auth().currentUser?.uid else {
+            alertMessage = "No user logged in."
+            showAlert = true
+            return
+        }
+        
+        let userRef = Database.database().reference().child("users").child(doctorId)
+        userRef.observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists(), let name = snapshot.childSnapshot(forPath: "name").value as? String {
+                self.doctorName = name
+                loadAppointments()
+            } else {
+                alertMessage = "Doctor not found."
+                showAlert = true
+            }
+        } withCancel: { error in
+            alertMessage = "Failed to load doctor details: \(error.localizedDescription)"
+            showAlert = true
+        }
+    }
+
+    private func loadAppointments() {
+        guard let doctorId = Auth.auth().currentUser?.uid else {
+            alertMessage = "No user logged in."
+            showAlert = true
+            return
+        }
+        
+        let appointmentsRef = Database.database().reference().child("appointments")
+        let query = appointmentsRef.queryOrdered(byChild: "cardiologist").queryEqual(toValue: doctorName)
+        
+        query.observeSingleEvent(of: .value) { snapshot in
+            var loadedAppointments = [Appointment]()
+            
+            for child in snapshot.children {
+                if let snapshot = child as? DataSnapshot,
+                   let dict = snapshot.value as? [String: Any],
+                   let date = dict["date"] as? String,
+                   let time = dict["time"] as? String,
+                   let patientName = dict["patientName"] as? String {
+                    
+                    let appointment = Appointment(id: snapshot.key, date: date, time: time, doctor: doctorName, patientId: dict["patientId"] as? String ?? "", patientName: patientName)
+                    loadedAppointments.append(appointment)
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.appointments = loadedAppointments
+            }
+        } withCancel: { error in
+            alertMessage = "Failed to load appointments: \(error.localizedDescription)"
+            showAlert = true
+        }
+    }
+
     private func saveAvailability() {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -137,8 +187,7 @@ struct DoctorView: View {
         let start = formatter.string(from: startTime)
         let end = formatter.string(from: endTime)
         
-        existingAvailability = "Date: \(date), Start: \(start), End: \(end)"
-        
+        currentAvailability = "Date: \(date), Start: \(start), End: \(end)"
         
         guard let doctorId = Auth.auth().currentUser?.uid else {
             alertMessage = "No user logged in."
@@ -146,12 +195,11 @@ struct DoctorView: View {
             return
         }
         
-        let availabilityRef = Database.database().reference().child("doctors").child(doctorId).child("availability")
+        let availabilityRef = Database.database().reference().child("availability").child(doctorId).child(date)
         
         let availabilityData: [String: Any] = [
-            "date": date,
-            "start": start,
-            "end": end
+            "startTime": start,
+            "endTime": end
         ]
         
         availabilityRef.setValue(availabilityData) { error, _ in
@@ -169,53 +217,26 @@ struct DoctorView: View {
         selectedDate = Date()
         startTime = Date()
         endTime = Date()
-        existingAvailability = "No availability set"
+        currentAvailability = "No availability set"
     }
-    
-    private func loadAppointments() {
-        guard let doctorId = Auth.auth().currentUser?.uid else {
-            print("No user logged in")
-            return
-        }
-        
-        let appointmentsRef = Database.database().reference().child("appointments").queryOrdered(byChild: "doctorId").queryEqual(toValue: doctorId)
-        
-        appointmentsRef.observe(.value) { snapshot in
-            var loadedAppointments = [Appointment]()
-            for child in snapshot.children {
-                if let snapshot = child as? DataSnapshot,
-                   let dict = snapshot.value as? [String: Any],
-                   let date = dict["date"] as? String,
-                   let time = dict["time"] as? String,
-                   let patientId = dict["patientId"] as? String,
-                   let patientName = dict["patientName"] as? String {
-                    let appointment = Appointment(
-                        id: snapshot.key,
-                        date: date,
-                        time: time,
-                        doctor: "", // Doctor field not used here but can be updated if needed
-                        patientId: patientId,
-                        patientName: patientName
-                    )
-                    loadedAppointments.append(appointment)
-                }
-            }
-            self.appointments = loadedAppointments
-        }
-    }
-    
+
     private func logout() {
         do {
             try Auth.auth().signOut()
-            print("Sign out successful")
             isShowingLoginView = true
         } catch let signOutError as NSError {
-            print("Error signing out: \(signOutError.localizedDescription)")
             alertMessage = "Error signing out: \(signOutError.localizedDescription)"
             showAlert = true
         }
+    }
 
-
+    struct Appointment: Identifiable {
+        let id: String
+        let date: String
+        let time: String
+        let doctor: String
+        let patientId: String
+        let patientName: String
     }
 }
 
