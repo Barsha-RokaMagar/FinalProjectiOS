@@ -2,12 +2,11 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 
-
-
 struct PatientDetailsView: View {
     @State private var patientName: String = "Loading..."
     @State private var patientEmail: String = "Loading..."
-    @State private var appointmentStatus: String = "Pending"
+    @State private var appointmentDate: String = "Loading..."
+    @State private var appointmentTime: String = "Loading..."
     @State private var isLoading: Bool = true
 
     var patientId: String
@@ -24,8 +23,11 @@ struct PatientDetailsView: View {
 
             Text("Email: \(patientEmail)")
                 .font(.body)
-
-            Text("Appointment Status: \(appointmentStatus)")
+            
+            Text("Appointment Date: \(appointmentDate)")
+                .font(.body)
+            
+            Text("Appointment Time: \(appointmentTime)")
                 .font(.body)
 
             VStack {
@@ -63,12 +65,13 @@ struct PatientDetailsView: View {
 
     private func loadPatientDetails() {
         let db = Firestore.firestore()
+        
+        
         db.collection("users").document(patientId).getDocument { document, error in
             if let document = document, document.exists {
                 if let data = document.data() {
                     patientName = data["name"] as? String ?? "Unknown"
                     patientEmail = data["email"] as? String ?? "Unknown"
-                    isLoading = false
                 } else {
                     patientName = "No data"
                     patientEmail = "No data"
@@ -76,6 +79,24 @@ struct PatientDetailsView: View {
             } else {
                 patientName = "Error"
                 patientEmail = "Error"
+                print("Document does not exist")
+            }
+        }
+
+      
+        db.collection("appointments").document(appointmentId).getDocument { document, error in
+            if let document = document, document.exists {
+                if let data = document.data() {
+                    appointmentDate = data["date"] as? String ?? "Unknown"
+                    appointmentTime = data["time"] as? String ?? "Unknown"
+                    isLoading = false
+                } else {
+                    appointmentDate = "No data"
+                    appointmentTime = "No data"
+                }
+            } else {
+                appointmentDate = "Error"
+                appointmentTime = "Error"
                 print("Document does not exist")
             }
         }
