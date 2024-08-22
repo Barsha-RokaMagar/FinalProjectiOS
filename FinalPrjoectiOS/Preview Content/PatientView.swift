@@ -15,7 +15,7 @@ struct PatientView: View {
                     .italic()
                     .padding(.bottom, 20)
                 
-                Image("patients") // Adjust this if you have a different image
+                Image("patients")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100, height: 100)
@@ -25,6 +25,8 @@ struct PatientView: View {
                     .padding()
                     .multilineTextAlignment(.center)
                 
+            }
+
                 VStack {
                     HStack {
                         NavigationLink(destination: CardiologistView()) {
@@ -54,33 +56,47 @@ struct PatientView: View {
                         }
                         NavigationLink(destination: GynecologistView()) {
                             SpecialistButton(icon: "staroflife.fill", title: "Gynecologist")
-                        }
                     }
                 }
-                .padding()
+                .padding(10)
                 
-                Spacer()
                 
-                Button(action: logout) {
-                    Text("Logout")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .background(Color.blue)
-                        .cornerRadius(10)
+                HStack {
+                    NavigationLink(destination: PatientProfileView()) {
+                            Text("Profile")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .frame(maxWidth: 150, minHeight: 50)
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                    }
+                    Spacer()
+
+                    Button(action: logout) {
+                        Text("Logout")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: 140, minHeight: 18)
+                            .padding()
+                            .background(Color.blue)
+                            .cornerRadius(10)
                 }
-                .padding(.bottom)
-                .background(
-                    NavigationLink(
-                        destination: LoginView(isLoggedIn: .constant(false)),
-                        isActive: $navigateToLogin,
-                        label: { EmptyView() }
-                    )
-                )
+                
             }
-            .navigationTitle("Patient Dashboard")
+            .padding(20)
+            .background(
+                NavigationLink(
+                    destination: LoginView(isLoggedIn: .constant(false)),
+                    isActive: $navigateToLogin,
+                    label: { EmptyView() }
+                )
+            )
         }
+        .navigationTitle("Patient Dashboard")
     }
+}
+                       
     
     private func logout() {
         do {

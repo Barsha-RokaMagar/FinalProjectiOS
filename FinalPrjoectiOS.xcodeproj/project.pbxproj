@@ -33,6 +33,7 @@
 		6E20E5222C616EB200997F7E /* NeurologistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5212C616EB200997F7E /* NeurologistView.swift */; };
 		6E20E5242C6178D500997F7E /* AppointmentDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5232C6178D500997F7E /* AppointmentDetailsView.swift */; };
 		6E20E5262C61B65B00997F7E /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5252C61B65B00997F7E /* RadioButtonView.swift */; };
+		6EE228112C76D65A00A4CDF7 /* PatientProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE228102C76D65A00A4CDF7 /* PatientProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 		6E20E5212C616EB200997F7E /* NeurologistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeurologistView.swift; sourceTree = "<group>"; };
 		6E20E5232C6178D500997F7E /* AppointmentDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentDetailsView.swift; sourceTree = "<group>"; };
 		6E20E5252C61B65B00997F7E /* RadioButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonView.swift; sourceTree = "<group>"; };
+		6EE228102C76D65A00A4CDF7 /* PatientProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 				6E20E5212C616EB200997F7E /* NeurologistView.swift */,
 				6E20E5232C6178D500997F7E /* AppointmentDetailsView.swift */,
 				6E20E5252C61B65B00997F7E /* RadioButtonView.swift */,
+				6EE228102C76D65A00A4CDF7 /* PatientProfileView.swift */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -333,6 +336,7 @@
 				6E20E51C2C616E4B00997F7E /* PediatricianView.swift in Sources */,
 				6E20E51A2C616D3F00997F7E /* DermatologistView.swift in Sources */,
 				6E20E5262C61B65B00997F7E /* RadioButtonView.swift in Sources */,
+				6EE228112C76D65A00A4CDF7 /* PatientProfileView.swift in Sources */,
 				6E20E5242C6178D500997F7E /* AppointmentDetailsView.swift in Sources */,
 				6E20E5082C2C4F0C00997F7E /* SplashScreenView.swift in Sources */,
 				6E20E50E2C2C64FC00997F7E /* DoctorView.swift in Sources */,
