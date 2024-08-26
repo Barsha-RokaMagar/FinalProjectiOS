@@ -17,7 +17,7 @@ struct DoctorView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Image(.doctor)
+                Image("doctor")  // Ensure you have an image named "doctor" in your assets
                     .resizable()
                     .frame(width: 100, height: 100)
                     .clipShape(Circle())
@@ -152,29 +152,49 @@ struct DoctorView: View {
         }
         
         let appointmentsRef = Database.database().reference().child("appointments")
-        let query = appointmentsRef.queryOrdered(byChild: "cardiologist").queryEqual(toValue: doctorName)
-        
-        query.observeSingleEvent(of: .value) { snapshot in
+        appointmentsRef.observeSingleEvent(of: .value) { snapshot in
             var loadedAppointments = [Appointment]()
             
             for child in snapshot.children {
                 if let snapshot = child as? DataSnapshot,
-                   let dict = snapshot.value as? [String: Any],
-                   let date = dict["date"] as? String,
-                   let time = dict["time"] as? String,
-                   let patientName = dict["patientName"] as? String {
+                   let data = snapshot.value as? [String: Any] {
                     
-                    let appointment = Appointment(id: snapshot.key, date: date, time: time, doctor: doctorName, patientId: dict["patientId"] as? String ?? "", patientName: patientName)
-                    loadedAppointments.append(appointment)
+                    let date = data["date"] as? String ?? ""
+                    let time = data["time"] as? String ?? ""
+                    let endTime = data["endTime"] as? String ?? ""
+                    let patientId = data["patientId"] as? String ?? ""
+                    let appointmentId = snapshot.key
+                    
+                    var isMatch = false
+                    let specialties = ["cardiologist", "dentist", "dermatologist", "gynecologist", "neurologist", "ophthalmologist", "pediatrician", "psychologist"]
+                    for specialty in specialties {
+                        if let value = data[specialty] as? String, doctorName == value {
+                            isMatch = true
+                            break
+                        }
+                    }
+                    
+                    if isMatch {
+                        let patientName = data["patientName"] as? String ?? "Unknown"
+                        let appointment = Appointment(id: appointmentId, date: date, time: time, doctor: doctorName, patientId: patientId, patientName: patientName)
+                        loadedAppointments.append(appointment)
+                    }
+                } else {
+                    print("Failed to parse appointment: \(snapshot)")
                 }
             }
             
             DispatchQueue.main.async {
-                self.appointments = loadedAppointments
+                if loadedAppointments.isEmpty {
+                    self.alertMessage = "No appointments found."
+                    self.showAlert = true
+                } else {
+                    self.appointments = loadedAppointments
+                }
             }
         } withCancel: { error in
-            alertMessage = "Failed to load appointments: \(error.localizedDescription)"
-            showAlert = true
+            self.alertMessage = "Failed to load appointments: \(error.localizedDescription)"
+            self.showAlert = true
         }
     }
 

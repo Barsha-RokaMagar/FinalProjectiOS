@@ -34,7 +34,6 @@
 		6E20E5242C6178D500997F7E /* AppointmentDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5232C6178D500997F7E /* AppointmentDetailsView.swift */; };
 		6E20E5262C61B65B00997F7E /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E20E5252C61B65B00997F7E /* RadioButtonView.swift */; };
 		6EE228112C76D65A00A4CDF7 /* PatientProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE228102C76D65A00A4CDF7 /* PatientProfileView.swift */; };
-		6EE228132C76DD4E00A4CDF7 /* Appointments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE228122C76DD4E00A4CDF7 /* Appointments.swift */; };
 		6EE228152C76F75700A4CDF7 /* PatientDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EE228142C76F75600A4CDF7 /* PatientDetailsView.swift */; };
 		6EE228172C777B8500A4CDF7 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 6EE228162C777B8500A4CDF7 /* FirebaseFirestoreCombine-Community */; };
 /* End PBXBuildFile section */
@@ -85,7 +84,6 @@
 		6E20E5232C6178D500997F7E /* AppointmentDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentDetailsView.swift; sourceTree = "<group>"; };
 		6E20E5252C61B65B00997F7E /* RadioButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonView.swift; sourceTree = "<group>"; };
 		6EE228102C76D65A00A4CDF7 /* PatientProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientProfileView.swift; sourceTree = "<group>"; };
-		6EE228122C76DD4E00A4CDF7 /* Appointments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Appointments.swift; sourceTree = "<group>"; };
 		6EE228142C76F75600A4CDF7 /* PatientDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientDetailsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -170,7 +168,6 @@
 				6E20E5232C6178D500997F7E /* AppointmentDetailsView.swift */,
 				6E20E5252C61B65B00997F7E /* RadioButtonView.swift */,
 				6EE228102C76D65A00A4CDF7 /* PatientProfileView.swift */,
-				6EE228122C76DD4E00A4CDF7 /* Appointments.swift */,
 				6EE228142C76F75600A4CDF7 /* PatientDetailsView.swift */,
 			);
 			path = "Preview Content";
@@ -352,7 +349,6 @@
 				6E20E50E2C2C64FC00997F7E /* DoctorView.swift in Sources */,
 				6E20E51E2C616E7300997F7E /* OpthalmologistView.swift in Sources */,
 				6E20E5142C61255D00997F7E /* CardiologistView.swift in Sources */,
-				6EE228132C76DD4E00A4CDF7 /* Appointments.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

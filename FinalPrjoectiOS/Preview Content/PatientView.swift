@@ -62,7 +62,7 @@ struct PatientView: View {
                 
                 
                 HStack {
-                    NavigationLink(destination: PatientProfileView()) {
+                    NavigationLink(destination: PatientProfileView(patientId: Auth.auth().currentUser?.uid ?? "")) {
                             Text("Profile")
                                 .font(.headline)
                                 .foregroundColor(.white)

@@ -117,7 +117,7 @@ struct CardiologistView: View {
             showAlert = true
             return
         }
-        
+
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         
@@ -128,8 +128,29 @@ struct CardiologistView: View {
         let time = timeFormatter.string(from: selectedTime)
         
         let patientId = Auth.auth().currentUser?.uid ?? ""
-        let patientName = Auth.auth().currentUser?.displayName ?? "Unknown"
         
+        
+        var patientName = Auth.auth().currentUser?.displayName ?? "Unknown"
+        
+       
+        if patientName == "Unknown" {
+            let userRef = Database.database().reference().child("users").child(patientId)
+            userRef.observeSingleEvent(of: .value) { snapshot in
+                if let dict = snapshot.value as? [String: Any],
+                   let name = dict["name"] as? String {
+                    patientName = name
+                }
+                
+                
+                self.finalizeAppointmentBooking(date: date, time: time, selectedCardiologist: selectedCardiologist, patientId: patientId, patientName: patientName)
+            }
+        } else {
+            
+            finalizeAppointmentBooking(date: date, time: time, selectedCardiologist: selectedCardiologist, patientId: patientId, patientName: patientName)
+        }
+    }
+
+    private func finalizeAppointmentBooking(date: String, time: String, selectedCardiologist: String, patientId: String, patientName: String) {
         let appointmentRef = Database.database().reference().child("appointments").childByAutoId()
         
         let appointmentData: [String: Any] = [
@@ -158,6 +179,7 @@ struct CardiologistView: View {
         }
     }
 }
+
 
 struct CardiologistView_Previews: PreviewProvider {
     static var previews: some View {

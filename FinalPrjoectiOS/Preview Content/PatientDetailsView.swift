@@ -1,9 +1,8 @@
 import SwiftUI
 import Firebase
-import FirebaseFirestore
+import FirebaseDatabase
 
 struct PatientDetailsView: View {
-    @State private var patientName: String = "Loading..."
     @State private var patientEmail: String = "Loading..."
     @State private var appointmentDate: String = "Loading..."
     @State private var appointmentTime: String = "Loading..."
@@ -12,16 +11,15 @@ struct PatientDetailsView: View {
     var patientId: String
     var appointmentId: String
 
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
         VStack(spacing: 20) {
             Text("Patient Details")
                 .font(.title)
                 .fontWeight(.bold)
 
-            Text("Name: \(patientName)")
-                .font(.body)
-
-            Text("Email: \(patientEmail)")
+            Text("Patient Email: \(patientEmail)") // Display email as patient name
                 .font(.body)
             
             Text("Appointment Date: \(appointmentDate)")
@@ -48,7 +46,7 @@ struct PatientDetailsView: View {
             .padding(.top, 25)
 
             Button(action: {
-                
+                self.presentationMode.wrappedValue.dismiss()
             }) {
                 Text("Go Back")
                     .frame(maxWidth: .infinity)
@@ -64,54 +62,42 @@ struct PatientDetailsView: View {
     }
 
     private func loadPatientDetails() {
-        let db = Firestore.firestore()
+        let ref = Database.database().reference()
         
-        
-        db.collection("users").document(patientId).getDocument { document, error in
-            if let document = document, document.exists {
-                if let data = document.data() {
-                    patientName = data["name"] as? String ?? "Unknown"
-                    patientEmail = data["email"] as? String ?? "Unknown"
-                } else {
-                    patientName = "No data"
-                    patientEmail = "No data"
-                }
+        // Fetch appointment details
+        ref.child("appointments").child(appointmentId).observeSingleEvent(of: .value) { snapshot in
+            print("Appointment snapshot: \(snapshot.value ?? "No data")")
+            if let data = snapshot.value as? [String: Any] {
+                self.appointmentDate = data["date"] as? String ?? "Unknown"
+                self.appointmentTime = data["time"] as? String ?? "Unknown"
+                
+                // Use the email as the patient email
+                self.patientEmail = data["patientName"] as? String ?? "Unknown" // Assuming patientName holds email
+                self.isLoading = false
             } else {
-                patientName = "Error"
-                patientEmail = "Error"
-                print("Document does not exist")
+                self.appointmentDate = "No data"
+                self.appointmentTime = "No data"
+                self.patientEmail = "No data"
+                self.isLoading = false
             }
-        }
-
-      
-        db.collection("appointments").document(appointmentId).getDocument { document, error in
-            if let document = document, document.exists {
-                if let data = document.data() {
-                    appointmentDate = data["date"] as? String ?? "Unknown"
-                    appointmentTime = data["time"] as? String ?? "Unknown"
-                    isLoading = false
-                } else {
-                    appointmentDate = "No data"
-                    appointmentTime = "No data"
-                }
-            } else {
-                appointmentDate = "Error"
-                appointmentTime = "Error"
-                print("Document does not exist")
-            }
+        } withCancel: { error in
+            print("Error fetching appointment document: \(error.localizedDescription)")
+            self.appointmentDate = "Error"
+            self.appointmentTime = "Error"
+            self.patientEmail = "Error"
+            self.isLoading = false
         }
     }
 
     private func confirmAppointment() {
-        let db = Firestore.firestore()
-        let appointmentRef = db.collection("appointments").document(appointmentId)
+        let ref = Database.database().reference().child("appointments").child(appointmentId)
         
-        appointmentRef.updateData([
+        ref.updateChildValues([
             "status": "Confirmed",
             "confirmationMessage": "Your appointment has been confirmed."
-        ]) { error in
+        ]) { error, _ in
             if let error = error {
-                print("Error updating appointment: \(error)")
+                print("Error updating appointment: \(error.localizedDescription)")
             } else {
                 updatePatientProfile(status: "Appointment Confirmed", message: "Your appointment has been confirmed.")
             }
@@ -119,12 +105,11 @@ struct PatientDetailsView: View {
     }
 
     private func cancelAppointment() {
-        let db = Firestore.firestore()
-        let appointmentRef = db.collection("appointments").document(appointmentId)
+        let ref = Database.database().reference().child("appointments").child(appointmentId)
         
-        appointmentRef.delete() { error in
+        ref.removeValue { error, _ in
             if let error = error {
-                print("Error removing appointment: \(error)")
+                print("Error removing appointment: \(error.localizedDescription)")
             } else {
                 updatePatientProfile(status: "Appointment Cancelled", message: "Your appointment has been cancelled.")
             }
@@ -132,25 +117,14 @@ struct PatientDetailsView: View {
     }
 
     private func updatePatientProfile(status: String, message: String) {
-        let db = Firestore.firestore()
-        let appointmentRef = db.collection("appointments").document(appointmentId)
-        let patientProfileRef = db.collection("patients").document(patientId).collection("appointments").document(appointmentId)
+        let ref = Database.database().reference().child("patients").child(patientId).child("appointments").child(appointmentId)
         
-        appointmentRef.updateData([
+        ref.updateChildValues([
             "status": status,
             "confirmationMessage": message
-        ]) { error in
+        ]) { error, _ in
             if let error = error {
-                print("Error updating appointment profile: \(error)")
-            }
-        }
-        
-        patientProfileRef.updateData([
-            "status": status,
-            "confirmationMessage": message
-        ]) { error in
-            if let error = error {
-                print("Error updating patient profile: \(error)")
+                print("Error updating patient profile: \(error.localizedDescription)")
             }
         }
     }
@@ -158,6 +132,6 @@ struct PatientDetailsView: View {
 
 struct PatientDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        PatientDetailsView(patientId: "examplePatientId", appointmentId: "exampleAppointmentId")
+        PatientDetailsView(patientId: "OkoWWYQgufcarLhxXtzGEgG2v1D3", appointmentId: "-O3hU5B_2Sywb10_SoIQ")
     }
 }
