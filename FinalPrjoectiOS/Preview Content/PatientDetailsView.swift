@@ -20,7 +20,7 @@ struct PatientDetailsView: View {
                 .font(.title)
                 .fontWeight(.bold)
 
-            Text("Patient Email: \(patientEmail)") // Display email as patient name
+            Text("Patient Email: \(patientEmail)") 
                 .font(.body)
             
             Text("Appointment Date: \(appointmentDate)")
@@ -67,15 +67,15 @@ struct PatientDetailsView: View {
     private func loadPatientDetails() {
         let ref = Database.database().reference()
         
-        // Fetch appointment details
+       
         ref.child("appointments").child(appointmentId).observeSingleEvent(of: .value) { snapshot in
             print("Appointment snapshot: \(snapshot.value ?? "No data")")
             if let data = snapshot.value as? [String: Any] {
                 self.appointmentDate = data["date"] as? String ?? "Unknown"
                 self.appointmentTime = data["time"] as? String ?? "Unknown"
                 
-                // Use the email as the patient email
-                self.patientEmail = data["patientName"] as? String ?? "Unknown" // Assuming patientName holds email
+               
+                self.patientEmail = data["patientName"] as? String ?? "Unknown"
                 self.isLoading = false
             } else {
                 self.appointmentDate = "No data"
@@ -102,7 +102,7 @@ struct PatientDetailsView: View {
                    print("Error updating appointment: \(error.localizedDescription)")
                } else {
                    updatePatientProfile(status: "Appointment Confirmed", message: "Your appointment has been confirmed.")
-                   self.alertMessage = "Failed to book appointment:"
+                   self.alertMessage = "Confirmed"
                    self.showAlert = true
                }
            }
@@ -117,6 +117,8 @@ struct PatientDetailsView: View {
                 print("Error removing appointment: \(error.localizedDescription)")
             } else {
                 updatePatientProfile(status: "Appointment Cancelled", message: "Your appointment has been cancelled.")
+                self.alertMessage = "Cancelled"
+                self.showAlert = true
             }
         }
     }

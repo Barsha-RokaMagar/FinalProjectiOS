@@ -25,8 +25,6 @@ struct PatientView: View {
                     .padding()
                     .multilineTextAlignment(.center)
                 
-            }
-
                 VStack {
                     HStack {
                         NavigationLink(destination: CardiologistView()) {
@@ -56,13 +54,12 @@ struct PatientView: View {
                         }
                         NavigationLink(destination: GynecologistView()) {
                             SpecialistButton(icon: "staroflife.fill", title: "Gynecologist")
+                        }
                     }
-                }
-                .padding(10)
-                
-                
-                HStack {
-                    NavigationLink(destination: PatientProfileView(patientId: Auth.auth().currentUser?.uid ?? "")) {
+                    .padding(10)
+                    
+                    HStack {
+                        NavigationLink(destination: PatientProfileView(patientId: Auth.auth().currentUser?.uid ?? "")) {
                             Text("Profile")
                                 .font(.headline)
                                 .foregroundColor(.white)
@@ -70,21 +67,22 @@ struct PatientView: View {
                                 .frame(maxWidth: 150, minHeight: 50)
                                 .background(Color.blue)
                                 .cornerRadius(10)
-                    }
-                    Spacer()
+                        }
+                        Spacer()
 
-                    Button(action: logout) {
-                        Text("Logout")
-                            .font(.headline)
-                            .foregroundColor(.white)
-                            .frame(maxWidth: 140, minHeight: 18)
-                            .padding()
-                            .background(Color.blue)
-                            .cornerRadius(10)
+                        Button(action: logout) {
+                            Text("Logout")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: 140, minHeight: 18)
+                                .padding()
+                                .background(Color.blue)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .padding(20)
                 }
-                
             }
-            .padding(20)
             .background(
                 NavigationLink(
                     destination: LoginView(isLoggedIn: .constant(false)),
@@ -92,11 +90,9 @@ struct PatientView: View {
                     label: { EmptyView() }
                 )
             )
+            .navigationTitle("Patient Dashboard")
         }
-        .navigationTitle("Patient Dashboard")
     }
-}
-                       
     
     private func logout() {
         do {

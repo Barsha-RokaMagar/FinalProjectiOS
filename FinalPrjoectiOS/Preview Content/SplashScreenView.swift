@@ -21,7 +21,7 @@ struct SplashScreenView: View {
                     .foregroundColor(/*@START_MENU_TOKEN@*/.blue/*@END_MENU_TOKEN@*/)
                     .frame(alignment: .topLeading)
                     .padding()
-            Image(.doctor)
+            Image(.splash)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 350,height: 350)

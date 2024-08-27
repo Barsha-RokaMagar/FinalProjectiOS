@@ -1,112 +1,148 @@
-
-
 import SwiftUI
 import Firebase
-import FirebaseFirestore
+import FirebaseDatabase
 
 struct PatientProfileView: View {
-    @State private var patientName: String = "Loading..."
-    @State private var appointmentList: [PatientAppointment] = []
-    @State private var isLoading: Bool = true
+    @StateObject private var viewModel: PatientProfileViewModel
+    @Environment(\.presentationMode) private var presentationMode
 
-    var patientId: String
-    @Environment(\.presentationMode) var presentationMode
+    init(patientId: String) {
+        _viewModel = StateObject(wrappedValue: PatientProfileViewModel(patientId: patientId))
+    }
 
     var body: some View {
-        VStack(spacing: 20) {
-            Text("Patient Profile")
-                .font(.title)
-                .fontWeight(.bold)
-
-            Text("Name: \(patientName)")
-                .font(.body)
-
-            List(appointmentList) { appointment in
-                VStack(alignment: .leading) {
-                    Text("Specialty: \(appointment.specialty)")
-                    Text("Doctor: \(appointment.doctorName)")
-                    Text("Date: \(appointment.date)")
-                    Text("Time: \(appointment.time)")
-                }
-                .padding(.vertical, 4)
-            }
-
-            Button(action: goBack) {
-                Text("Go Back")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-            }
-            .padding(.top, 24)
-        }
-        .padding()
-        .onAppear {
-            loadPatientDetails()
-            loadAppointmentDetails()
-        }
-        .navigationBarTitle("Patient Profile", displayMode: .inline)
-    }
-
-    private func loadPatientDetails() {
-        let db = Firestore.firestore()
-        db.collection("users").document(patientId).getDocument { document, error in
-            if let document = document, document.exists {
-                if let data = document.data() {
-                    patientName = data["name"] as? String ?? "Unknown"
-                }
-                isLoading = false
-            } else {
-                patientName = "Error loading patient details"
-                print("Document does not exist")
-                isLoading = false
-            }
-        }
-    }
-
-    private func loadAppointmentDetails() {
-        let db = Firestore.firestore()
-        db.collection("appointments")
-            .whereField("patientId", isEqualTo: patientId)
-            .addSnapshotListener { querySnapshot, error in
-                if let error = error {
-                    print("Error getting documents: \(error)")
+        NavigationView {
+            VStack {
+                if viewModel.isLoading {
+                    ProgressView("Loading...")
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .padding()
                 } else {
-                    var appointments: [PatientAppointment] = []
-                    for document in querySnapshot!.documents {
-                        let data = document.data()
-                        if let doctorName = data["doctorName"] as? String,
-                           let date = data["date"] as? String,
-                           let time = data["time"] as? String,
-                           let specialty = data["specialty"] as? String {
-                            let appointment = PatientAppointment(
-                                id: document.documentID,
-                                doctorName: doctorName,
-                                date: date,
-                                time: time,
-                                specialty: specialty
-                            )
-                            appointments.append(appointment)
+                    Text(viewModel.patientName)
+                        .font(.largeTitle)
+                        .padding()
+
+                    ScrollView {
+                        LazyVStack {
+                            if viewModel.appointments.isEmpty {
+                                Text("No appointments available.")
+                                    .padding()
+                            } else {
+                                ForEach(viewModel.appointments) { appointment in
+                                    VStack(alignment: .leading, spacing: 10) {
+                                        Text("Doctor: \(appointment.doctorName)")
+                                            .font(.headline)
+                                        Text("Date: \(appointment.date)")
+                                            .font(.subheadline)
+                                        Text("Time: \(appointment.time)")
+                                            .font(.subheadline)
+                                        Text("Status: \(appointment.status)")
+                                            .font(.subheadline)
+                                    }
+                                    .padding()
+                                }
+                            }
                         }
                     }
-                    appointmentList = appointments
-                }
-            }
-    }
 
-    private func goBack() {
-        presentationMode.wrappedValue.dismiss()
+                    if let errorMessage = viewModel.errorMessage {
+                        Text("Error: \(errorMessage)")
+                            .foregroundColor(.red)
+                            .padding()
+                    }
+                }
+
+                Button(action: {
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Text("Go Back")
+                        .padding()
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                }
+                .padding()
+            }
+            .navigationTitle("Patient Profile")
+        }
+        .onAppear {
+            viewModel.loadPatientData()
+            viewModel.loadAppointments()
+        }
     }
 }
 
-extension PatientProfileView {
-    struct PatientAppointment: Identifiable {
-        var id: String
-        var doctorName: String
-        var date: String
-        var time: String
-        var specialty: String
+class PatientProfileViewModel: ObservableObject {
+    @Published var appointments: [PatientAppointment] = []
+    @Published var isLoading = true
+    @Published var errorMessage: String?
+    @Published var patientName: String = ""
+    
+    private var patientId: String
+    private var ref = Database.database().reference()
+
+    init(patientId: String) {
+        self.patientId = patientId
+    }
+    
+    func loadPatientData() {
+        ref.child("users").child(patientId).observeSingleEvent(of: .value) { snapshot in
+            if snapshot.exists() {
+                if let data = snapshot.value as? [String: Any],
+                   let name = data["name"] as? String {
+                    self.patientName = name
+                }
+            }
+            self.isLoading = false
+        } withCancel: { error in
+            self.errorMessage = "Error fetching patient data: \(error.localizedDescription)"
+            self.isLoading = false
+        }
+    }
+    
+    func loadAppointments() {
+        ref.child("appointments")
+            .queryOrdered(byChild: "patientId")
+            .queryEqual(toValue: patientId)
+            .observe(.value) { snapshot in
+                var appointments: [PatientAppointment] = []
+
+                if snapshot.exists() {
+                    for child in snapshot.children.allObjects as! [DataSnapshot] {
+                        if let data = child.value as? [String: Any] {
+                            let appointment = PatientAppointment(data: data)
+                            appointments.append(appointment)
+                        }
+                    }
+                    self.appointments = appointments
+                }
+                self.isLoading = false
+            } withCancel: { error in
+                self.errorMessage = "Error fetching appointments: \(error.localizedDescription)"
+                self.isLoading = false
+            }
+    }
+}
+
+struct PatientAppointment: Identifiable {
+    var id: String
+    var doctorName: String
+    var date: String
+    var time: String
+    var status: String
+
+    init(data: [String: Any]) {
+        self.id = UUID().uuidString
+
+       
+        let specialistKeys = ["cardiologist", "dentist", "dermatologist", "generalPractitioner", "orthopedic"]
+
+       
+        self.doctorName = specialistKeys.compactMap { data[$0] as? String }.first ?? "Unknown"
+
+        self.date = data["date"] as? String ?? "Unknown"
+        self.time = data["time"] as? String ?? "Unknown"
+        self.status = data["status"] as? String ?? "Unknown"
     }
 }
 

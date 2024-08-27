@@ -16,9 +16,9 @@ struct DoctorView: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {  // Wrap the content in a ScrollView
+            ScrollView {
                 VStack {
-                    Image("doctor")  // Ensure you have an image named "doctor" in your assets
+                    Image("doctor")  
                         .resizable()
                         .frame(width: 100, height: 100)
                         .clipShape(Circle())
@@ -83,17 +83,28 @@ struct DoctorView: View {
                         Text("Appointments")
                             .font(.headline)
                             .padding(.top, 16)
-                        HStack{
+                        HStack {
                             Text("Date")
+                                 .bold()
+                                 .frame(maxWidth: .infinity, alignment:
+                                        .leading)
                             Text("Time")
+                                .bold()
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             Text("Patient")
+                                .bold()
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
+                            .padding()
+                            .background(Color(.systemGray5))
+                            .cornerRadius(8)
+                        
                         LazyVStack {
                             ForEach(appointments) { appointment in
                                 AppointmentRow(appointment: appointment)
                             }
                         }
-                        .padding(.bottom, 16) // Add padding if needed
+                        .padding(.bottom, 16) 
                     }
                     .padding(16)
 
@@ -257,20 +268,21 @@ struct AppointmentRow: View {
 
     var body: some View {
         HStack {
-            Text("\(appointment.date)")
-            Text("\(appointment.time)")
+            Text(appointment.date)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
-            NavigationLink(destination: PatientDetailsView(
-                patientId: appointment.patientId,
-                appointmentId: appointment.id
-            )) {
-                Text("\(appointment.patientName)")
-                    .foregroundColor(.blue)  // Makes the text look like a link
-            }
+            Text(appointment.time)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            Text(appointment.patientName)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(8)
     }
 }
+
 
 
 struct DoctorView_Previews: PreviewProvider {
