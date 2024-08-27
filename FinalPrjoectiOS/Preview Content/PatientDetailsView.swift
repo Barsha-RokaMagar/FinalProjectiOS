@@ -7,7 +7,8 @@ struct PatientDetailsView: View {
     @State private var appointmentDate: String = "Loading..."
     @State private var appointmentTime: String = "Loading..."
     @State private var isLoading: Bool = true
-
+    @State private var showAlert = false
+    @State private var alertMessage = ""
     var patientId: String
     var appointmentId: String
 
@@ -53,6 +54,8 @@ struct PatientDetailsView: View {
             }
             .buttonStyle(.borderedProminent)
             .padding(10)
+        } .alert(isPresented: $showAlert) {
+            Alert(title: Text("Message"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
         }
         .padding()
         .onAppear {
@@ -88,21 +91,23 @@ struct PatientDetailsView: View {
             self.isLoading = false
         }
     }
-
     private func confirmAppointment() {
-        let ref = Database.database().reference().child("appointments").child(appointmentId)
-        
-        ref.updateChildValues([
-            "status": "Confirmed",
-            "confirmationMessage": "Your appointment has been confirmed."
-        ]) { error, _ in
-            if let error = error {
-                print("Error updating appointment: \(error.localizedDescription)")
-            } else {
-                updatePatientProfile(status: "Appointment Confirmed", message: "Your appointment has been confirmed.")
-            }
-        }
-    }
+           let ref = Database.database().reference().child("appointments").child(appointmentId)
+           
+           ref.updateChildValues([
+               "status": "Confirmed",
+               "confirmationMessage": "Your appointment has been confirmed."
+           ]) { error, _ in
+               if let error = error {
+                   print("Error updating appointment: \(error.localizedDescription)")
+               } else {
+                   updatePatientProfile(status: "Appointment Confirmed", message: "Your appointment has been confirmed.")
+                   self.alertMessage = "Failed to book appointment:"
+                   self.showAlert = true
+               }
+           }
+       }
+   
 
     private func cancelAppointment() {
         let ref = Database.database().reference().child("appointments").child(appointmentId)
