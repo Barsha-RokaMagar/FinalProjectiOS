@@ -63,7 +63,7 @@ struct LoginView: View {
 
                 HStack {
                     Text("New user?")
-                    NavigationLink(destination: registerView(isLoggedIn: $isLoggedIn)) {
+                    NavigationLink(destination: RegisterView(isLoggedIn: $isLoggedIn)) {
                         Text("Sign Up").foregroundColor(.blue)
                     }
 

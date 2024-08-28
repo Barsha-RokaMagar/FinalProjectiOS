@@ -263,23 +263,26 @@ struct DoctorView: View {
     }
 }
 
+
 struct AppointmentRow: View {
     let appointment: Appointment
 
     var body: some View {
         HStack {
-            Text(appointment.date)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Text(appointment.time)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Text(appointment.patientName)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            Text("Date: \(appointment.date)")
+                .padding(.trailing, 8)
+            Text("Time: \(appointment.time)")
+                .padding(.trailing, 8)
+
+            NavigationLink(destination: PatientDetailsView(
+                patientId: appointment.patientId,
+                appointmentId: appointment.id
+            )) {
+                Text("Patient: \(appointment.patientName)")
+                    .foregroundColor(.blue)
+            }
         }
         .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(8)
     }
 }
 

@@ -1,7 +1,7 @@
 import SwiftUI
 import Firebase
 
-struct registerView: View {
+struct RegisterView: View {
     @State private var name = ""
     @State private var username = ""
     @State private var password = ""
@@ -159,7 +159,9 @@ struct registerView: View {
                         alertMessage = "Sign Up Successful"
                         showAlert = true
                         isLoggedIn = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                        print("Setting navigateToLogin to true")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            print("Navigating to login view")
                             navigateToLogin = true
                         }
                     }
@@ -201,10 +203,10 @@ struct PasswordField: View {
     }
 }
 
-struct registerView_Previews: PreviewProvider {
+struct RegisterView_Previews: PreviewProvider {
     @State static var isLoggedIn = false
 
     static var previews: some View {
-        registerView(isLoggedIn: $isLoggedIn)
+        RegisterView(isLoggedIn: $isLoggedIn)
     }
 }

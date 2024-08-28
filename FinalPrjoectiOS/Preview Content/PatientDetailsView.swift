@@ -3,7 +3,7 @@ import Firebase
 import FirebaseDatabase
 
 struct PatientDetailsView: View {
-    @State private var patientEmail: String = "Loading..."
+    @State private var patientName: String = "Loading..."
     @State private var appointmentDate: String = "Loading..."
     @State private var appointmentTime: String = "Loading..."
     @State private var isLoading: Bool = true
@@ -20,7 +20,7 @@ struct PatientDetailsView: View {
                 .font(.title)
                 .fontWeight(.bold)
 
-            Text("Patient Email: \(patientEmail)") 
+            Text("Patient Name: \(patientName)")
                 .font(.body)
             
             Text("Appointment Date: \(appointmentDate)")
@@ -75,19 +75,19 @@ struct PatientDetailsView: View {
                 self.appointmentTime = data["time"] as? String ?? "Unknown"
                 
                
-                self.patientEmail = data["patientName"] as? String ?? "Unknown"
+                self.patientName = data["patientName"] as? String ?? "Unknown"
                 self.isLoading = false
             } else {
                 self.appointmentDate = "No data"
                 self.appointmentTime = "No data"
-                self.patientEmail = "No data"
+                self.patientName = "No data"
                 self.isLoading = false
             }
         } withCancel: { error in
             print("Error fetching appointment document: \(error.localizedDescription)")
             self.appointmentDate = "Error"
             self.appointmentTime = "Error"
-            self.patientEmail = "Error"
+            self.patientName = "Error"
             self.isLoading = false
         }
     }
